@@ -41,8 +41,8 @@ app.use(express.json());
 app.use(
   session({
     secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     store: new MySQLStore(database),
   })
 );
