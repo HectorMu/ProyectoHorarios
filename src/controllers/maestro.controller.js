@@ -6,7 +6,7 @@ class MaestroController {
         "https://api-horariomaestros.azurewebsites.net/Principal/BuscarMaestroCompleto?nombre=";
       const response = await fetch(API);
       const maestros = await response.json();
-      res.render("maestros/maestros", { maestros });
+      res.render("Maestros/maestros", { maestros });
     } catch (error) {
       console.log(error);
       res.render("Maestros/maestros");
