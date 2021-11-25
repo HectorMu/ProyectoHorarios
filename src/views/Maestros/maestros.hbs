@@ -1,0 +1,77 @@
+{{>sidebar}}
+
+<div id="content">
+  {{>navigation}}
+  {{>message}}
+  <div class="menu_info card mt-4">
+    <div class="card-body card-buscador">
+      <div class="col-auto">
+        <div class="row">
+          <form action="/maestros/search" method="post" class="col-md-6 mb-2 input-group">
+            <input type="text" class="form-control" name="txtBuscar" id="tableSearch" placeholder="Buscar maestro..." />
+            <div class="input-group-prepend">
+              <button type="submit" class="btn btn-info">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </form>
+
+          <div class="col-md-6 my-auto" style="text-align: right;">
+            <a href="/maestros/add" class="btn btn-info">
+              <i class="fas fa-plus-square my-auto mr-1"></i>
+              Agregar maestro
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body card-h5 bg-gray">
+      <div class="container">
+        <h5>Maestros</h5>
+      </div>
+    </div>
+
+    <div class="card-body col-12">
+      <div class="table-responsive">
+        <table class="table table-hover" style="font-size: 14px;">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Academia</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each maestros}}
+            <tr>
+              <td>{{nombre}}</td>
+              <td>{{academia}}</td>
+              <td>
+                <!--BOTÓN ACCIONES-->
+                <div class="btn-group dropleft">
+                  <div>
+                    <a href="/maestros/editarM/{{id}}" class="btn btn-size-right btn-info ml-1">
+                      Editar
+                    </a>
+                  </div>
+                  <div>
+                    <a href="/maestros/delete/{{id}}" onclick="return confirm('¿Quieres eliminar a el maestro {{nombre}}? Recuerda que primero debes eliminar las materias de este.')"
+                      class="btn btn-size-right btn-danger ml-1" id="btn-delete">
+                      Eliminar
+                    </a>
+                  </div>
+                </div>
+                <!--END BOTÓN ACCIONES-->
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--END TABLA-->
+
+  <script type="module" src="/js/index.js"></script>
+</div>

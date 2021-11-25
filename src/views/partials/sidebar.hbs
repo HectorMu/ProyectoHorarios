@@ -1,0 +1,40 @@
+<nav id="sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <h4><a class="link" href="/">Horarios</a></h4>
+  </div>
+
+  <ul class="list-unstyled side_ul components">
+    <p style="color: #c14b1f">
+      {{#if user}}
+        Administrador
+      {{else}}
+
+      {{/if}}
+    </p>
+
+    <li>
+      <a class="link" href="/horarios">
+        <i class="far fa-clock mr-1"></i>
+        Horarios
+      </a>
+    </li>
+
+    {{#if user}}
+
+      <li>
+        <a class="link" href="/maestros">
+          <i class="fas fa-chalkboard-teacher mr-1"></i>
+          Maestros
+        </a>
+      </li>
+
+      <li>
+        <a class="link" href="/administradores">
+          <i class="fas fa-user mr-1"></i>
+          Administradores
+        </a>
+      </li>
+
+    {{/if}}
+  </ul>
+</nav>

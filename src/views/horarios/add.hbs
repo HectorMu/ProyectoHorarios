@@ -1,0 +1,89 @@
+{{>sidebar}}
+
+<div id="content" class="">
+  {{>navigation}}
+  {{>message}}
+  
+  <div class="menu_info container mt-5">
+    <div class="row">
+      <div class="col-lg-4 col-md-6 col-12 mx-auto">
+        <div class="card text-center">
+          <div class="card-header">
+            <h3>Agregar horario</h3>
+          </div>
+          
+          <div class="card-body">
+            <form action="/horarios" method="POST">
+
+              {{!-- INPUT 1 --}}
+              <div class="form-group">
+                <select
+                  name="Dia"
+                  class="form-control"
+                  required
+                >
+                <option value="" hidden selected>Dia</option>
+               
+                <option value="Lunes">Lunes</option>
+                <option value="Martes">Martes</option>
+                <option value="Miercoles">Miercoles</option>
+                <option value="Jueves">Jueves</option> 
+                <option value="Viernes">Viernes</option>
+                <option value="Sabado">Sabado</option>
+                  
+                </select>
+              </div>
+              
+
+              {{!-- INPUT 2 --}}
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="RangoHora"
+                  placeholder="Rango de hora"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              {{!-- INPUT 3 --}}
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="Ubicacion"
+                  placeholder="Ubicación"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              {{!-- SELECT 1 --}}
+              <div class="form-group">
+                <select
+                  name="Maestro"
+                  class="form-control"
+                  required
+                >
+                <option hidden selected>Maestros</option>
+                {{#each Maestros}}
+                <option value="{{id}}">{{nombre}}</option>
+                {{/each}}
+                </select>
+              </div>
+
+              {{!-- BOTON GUARDAR --}}
+              <div class="form-group">
+                <button class="btn btn-info btn-block">
+                  Guardar
+                </button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/index.js"></script>

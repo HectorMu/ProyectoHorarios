@@ -1,0 +1,97 @@
+{{>sidebar}}
+
+<div id="content">
+  {{>navigation}}
+  {{>message}}
+  <div class="menu_info card mt-4">
+    <div class="card-body card-buscador">
+      <div class="col-auto">
+        <div class="row">
+          <form action="/administradores/search" method="post" class="col-md-6 mb-2 input-group">
+            <input
+              type="text"
+              class="form-control"
+              name="txtBuscar"
+              id="tableSearch"
+              placeholder="Buscar"
+            />
+            <div class="input-group-prepend">
+              <button type="submit" class="btn btn-info">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </form>
+
+          <div class="col-md-6 my-auto" style="text-align: right;">          
+            <a href="/administradores/add" class="btn btn-info">
+                <i class="fas fa-plus-square my-auto mr-1"></i>
+                Agregar administradores
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body card-h5 bg-gray">
+      <div class="container">
+        <h5>Administradores</h5>
+      </div>
+    </div>
+
+    <div class="card-body col-12">
+      <div class="table-responsive">
+        <table class="table table-hover" style="font-size: 14px;">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Password</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each usuarios}}
+              <tr>
+                <td>{{usuario}}</td>
+                <td>{{nombre}}</td>
+                <td>{{correo}}</td>
+                <td>{{password}}</td>
+
+                <td>
+                  <!--BOTÓN ACCIONES-->
+                  <div class="btn-group dropleft">
+                    <div>
+                      <a
+                        href="/administradores/edit/{{id}}"
+                        class="btn btn-size-right btn-info ml-1"
+                      >
+                        Editar
+                      </a>
+                    </div>
+
+                    <div>
+                      <a
+                        href="/administradores/delete/{{id}}"
+                        onclick="return confirm('¿Quieres eliminar a {{nombre}}?')"
+                        class="btn btn-size-right btn-danger ml-1"
+                        id="btn-delete"
+                      >
+                        Eliminar
+                      </a>
+                    </div>
+                  </div>
+                  <!--END BOTÓN ACCIONES-->
+                </td>
+
+              </tr>
+              {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--END TABLA-->
+
+  <script type="module" src="/js/index.js"></script>
+</div>

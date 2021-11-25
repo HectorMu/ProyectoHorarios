@@ -1,0 +1,88 @@
+{{>sidebar}}
+
+<div id="content" class="">
+  {{>navigation}}
+  {{>message}}
+
+  <div class="menu_info container mt-5">
+    <div class="row">
+      <div class="col-lg-4 col-md-6 col-12 mx-auto">
+        <div class="card text-center">
+          <div class="card-header">
+            <h3>Editar horario</h3>
+          </div>
+
+          <div class="card-body">
+            <form action="/horarios/editarh/{{h.id}}" method="POST">
+
+              {{! INPUT 2 }}
+              <div class="form-group">
+                <select
+                  type="text"
+                  name="Dia"
+                  placeholder="Día"
+                  class="form-control"
+                  value="{{h.dia}}"
+                  required
+                >
+                  <option value="{{h.dia}}" selected>{{h.dia}}</option>
+                  <option value="Lunes">Lunes</option>
+                  <option value="Martes">Martes</option>
+                  <option value="Miercoles">Miercoles</option>
+                  <option value="Jueves">Jueves</option>
+                  <option value="Viernes">Viernes</option>
+                  <option value="Sabado">Sabado</option>
+                </select>
+              </div>
+
+              {{!  INPUT 3 }}
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="RangoHora"
+                  placeholder="Rango de horas"
+                  class="form-control"
+                  value="{{h.rangohoras}}"
+                  required
+                />
+              </div>
+
+              {{! INPUT 4 }}
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="Ubicacion"
+                  placeholder="Ubicación"
+                  class="form-control"
+                  value="{{h.ubicacion}}"
+                  required
+                />
+              </div>
+
+              {{! INPUT 5 }}
+              <div class="form-group">
+                <select class="form-control" name="fk_maestro">
+                  <option value="{{h.fk_maestro}}">{{h.nombre}}</option>
+                  {{#each Maestros}}
+                    <option value="{{id}}">{{nombre}}</option>
+                  {{/each}}
+                </select>
+              </div>
+
+
+              {{! BOTON GUARDAR }}
+              <div class="form-group">
+                <button class="btn btn-info btn-block">
+                  Editar
+                </button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/index.js"></script>

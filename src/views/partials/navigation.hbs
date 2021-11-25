@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <button
+      type="button"
+      id="sidebarCollapse"
+      class="btn btn-oxford text-white"
+    >
+      <i class="fas fa-align-left py-1"></i>
+    </button>
+
+    {{#if user}}
+      <button
+        class="btn btn-oxford d-inline-block d-lg-none ml-auto"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fas fa-align-justify"></i>
+      </button>
+
+      <div class="collapse navbar-collapse my-2" id="navbarSupportedContent">
+        <ul class="nav navbar-nav ml-auto">
+
+          <div class="btn-group dropleft">
+            <button
+              type="button"
+              class="btn dropdown btn-oxford"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              {{user.usuario}}
+            </button>
+            <div class="dropdown-menu">
+              <a href="/logout" class="dropdown-item">Salir</a>
+            </div>
+          </div>
+        </ul>
+      </div>
+    {{/if}}
+  </div>
+</nav>

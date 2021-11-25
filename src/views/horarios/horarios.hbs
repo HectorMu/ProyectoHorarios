@@ -1,0 +1,114 @@
+{{>sidebar}}
+
+<div id="content">
+  {{>navigation}}
+  {{>message}}
+  <div class="menu_info card mt-4">
+    <div class="card-body card-buscador">
+      <div class="col-auto">
+        <div class="row">
+          <form action="/horarios/search" method="post" class="col-md-6 mb-2 input-group">
+            <input
+              type="text"
+              class="form-control"
+              name = "txtBuscar"
+              id="tableSearch"
+              placeholder="Buscar por maestro..."
+            />
+            <div class="input-group-prepend">
+              <button class="btn btn-info" type="submit">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </form>
+
+          {{#if user}}
+          <div class="col-md-6 my-auto" style="text-align: right;">          
+            <a href="/horarios/add" class="btn btn-info">
+                <i class="fas fa-plus-square my-auto mr-1"></i>
+                Agregar horario
+            </a>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body card-h5 bg-gray">
+      <div class="container">
+        <h5>Horarios</h5>
+      </div>
+    </div>
+
+    <div class="card-body col-12">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped" style="font-size: 14px;">
+          <thead>
+            <tr>
+              <th>Día</th>
+              <th>Rango de hora</th>
+              <th>Ubicación</th>
+              <th>Maestro</th>
+              {{#if user}}
+              <th>Acciones</th>
+              {{/if}}
+            </tr>
+          </thead>
+          <tbody>
+            {{#if user}}
+
+              {{#each horarios}}
+                <tr>
+                  <td>{{dia}}</td>
+                  <td>{{rangohoras}}</td>
+                  <td>{{ubicacion}}</td>
+                  <td>{{nombre}}</td>
+
+                  <td>
+                    <!--BOTÓN ACCIONES-->
+                    <div class="btn-group dropleft">
+                      <div>
+                        <a
+                          href="/horarios/editarh/{{id}}"
+                          class="btn btn-size-right btn-info ml-1"
+                        >
+                          Editar
+                        </a>
+                      </div>
+
+                      <div>
+                        <a
+                          href="/horarios/delete/{{id}}"
+                          onclick="return confirm('¿Quieres eliminar el horario del maestro {{nombre}} ?')"
+                          class="btn btn-size-right btn-danger ml-1"
+                          id="btn-delete"
+                        >
+                          Eliminar
+                        </a>
+                      </div>
+                    </div>
+                    <!--END BOTÓN ACCIONES-->
+                  </td>
+                </tr>
+                {{/each}}
+
+              {{else}}
+                {{#each horarios}}
+                <tr>
+                  <td>{{dia}}</td>
+                  <td>{{rangohoras}}</td>
+                  <td>{{ubicacion}}</td>
+                  <td>{{nombre}}</td>
+                </tr>
+                {{/each}}
+
+              {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--END TABLA-->
+
+  <script type="module" src="/js/index.js"></script>
+</div>
