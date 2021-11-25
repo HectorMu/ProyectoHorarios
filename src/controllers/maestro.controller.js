@@ -9,12 +9,12 @@ class MaestroController {
       res.render("maestros/maestros", { maestros });
     } catch (error) {
       console.log(error);
-      res.render("maestros/maestros");
+      res.render("Maestros/maestros");
     }
   }
 
   RenderInsert(req, res) {
-    res.render("maestros/add");
+    res.render("Maestros/add");
   }
 
   async Insert(req, res) {
@@ -95,10 +95,10 @@ class MaestroController {
       const maestros = teacher.filter((m) =>
         m.nombre.toLowerCase().includes(txtBuscar.toLowerCase())
       );
-      res.render("maestros/maestros", { maestros });
+      res.render("Maestros/maestros", { maestros });
     } catch (error) {
       console.log(error);
-      res.render("maestros/maestros");
+      res.render("Maestros/maestros");
     }
   }
 
