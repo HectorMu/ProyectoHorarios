@@ -47,10 +47,10 @@ class MaestroController {
       const maestros = await response.json();
       const maestro = maestros.filter((m) => m.id == id);
 
-      res.render("maestros/editarM", { m: maestro[0] });
+      res.render("Maestros/editarM", { m: maestro[0] });
     } catch (error) {
       console.log(error);
-      res.render("maestros/editarM");
+      res.render("Maestros/editarM");
     }
   }
   
