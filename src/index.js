@@ -67,6 +67,7 @@ app.use(require("./routes/auth.route"));
 app.use(require("./routes/administrador.route"));
 app.use(require("./routes/maestro.route"));
 app.use(require("./routes/horarios.route"));
+app.use(require("./routes/api.horarios.route"));
 
 app.use(require("./routes/status.route"));
 

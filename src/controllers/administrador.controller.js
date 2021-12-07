@@ -1,13 +1,10 @@
-const fetch = require("node-fetch");
+const pool = require('../lib/database')
 const helpers = require('../lib/helpers')
 class AdministradorController {
   //Listado de Usuarios
   async List(req, res) {
     try {
-      const response = await fetch(
-        "https://api-horariomaestros.azurewebsites.net/Principal/ConsultarUsuarios"
-      );
-      const usuarios = await response.json();
+      const usuarios = await pool.query('select * from usuarios')
       res.render("administradores/administradores", { usuarios });
     } catch (error) {
       console.log(error);
@@ -22,8 +19,7 @@ class AdministradorController {
   //Insertar usuario en la API
   async Insert(req, res) {
     try {
-      const { usuario, nombre, correo, password } = req.body;
-
+      const { nombre, correo, password } = req.body;
       const validateEmail = await helpers.validateExistingEmail(correo)
       console.log(validateEmail)
       if(validateEmail){
@@ -31,22 +27,12 @@ class AdministradorController {
         res.redirect("/administradores/add");
         return 
       }
-      const nuevoUsuario = { usuario, nombre, correo, password }
+      const nuevoUsuario = { nombre, correo, password }
       nuevoUsuario.password = await helpers.encryptPassword(password)
-      const API = `https://api-horariomaestros.azurewebsites.net/Principal/AlmacenarUsuario?Usuario=${nuevoUsuario.usuario}&Nombre=${nuevoUsuario.nombre}&Correo=${nuevoUsuario.correo}&Password=${nuevoUsuario.password}`;
-      const response = await fetch(API);
-      const data = await response;
-
-
-      //NOTA: las apis de ASP.NET retornan un estatus en texto.... Entonces asi se haria esta validacion
-      console.log(data.statusText);
-      if (data.statusText === "OK") {
-        req.flash("success", "Usuario añadido exitosamente");
-        res.redirect("/administradores");
-      } else {
-        req.flash("message", "Hubo un error al añadir al usuario");
-        res.redirect("/administradores");
-      }
+      await pool.query('insert into usuarios set ?',[nuevoUsuario])
+      req.flash("success", "Usuario añadido exitosamente");
+      res.redirect("/administradores");
+     
     } catch (error) {
       console.log(error);
       req.flash("message", "Hubo un error");
@@ -56,14 +42,9 @@ class AdministradorController {
 
   //renderizareditar
   async RenderEdit(req, res) {
+    const { id } = req.params;
     try {
-      const { id } = req.params;
-      const API = "https://api-horariomaestros.azurewebsites.net/Principal/ConsultarUsuarios";
-      const response = await fetch(API);
-      const administradores = await response.json();
-      console.log(administradores);
-      const administrador = administradores.filter((a) => a.id == id);
-
+      const administrador = await pool.query('select * from usuarios where id= ?',[id])
       res.render("administradores/edit", { a: administrador[0] });
     } catch (error) {
       console.log(error);
@@ -73,25 +54,17 @@ class AdministradorController {
 
   //Método editar
   async Edit(req, res) {
+    const { id } = req.params;
     try {
-      const { id } = req.params;
-      const { usuario, nombre, correo, password } = req.body;
-      
-      const usuarioEditado = { usuario, nombre, correo, password }
+     
+      const { nombre, correo, password } = req.body;
+      const usuarioEditado = { nombre, correo, password }
       usuarioEditado.password = await helpers.encryptPassword(password)
-
-      const API = `https://api-horariomaestros.azurewebsites.net/Principal/ActualizarUsuario?Id=${id}&Usuario=${usuarioEditado.usuario}&Nombre=${usuarioEditado.nombre}&Correo=${usuarioEditado.correo}&Password=${usuarioEditado.password}`;
-      const response = await fetch(API);
-      const data = await response;
-      console.log(data.statusText);
-      if (data.statusText == 'OK') {
-        req.flash('success', 'Los datos del usuario se actualizaron correctamente')
-        res.redirect("/administradores")
-      } else {
-        req.flash('message', 'Ocurrio un error al actualizar, intentalo de nuevo')
-        res.redirect("/administradores/edit/" + id)
-      }
+      await pool.query('update usuarios set ? where id = ?',[usuarioEditado, id])
+      req.flash('success', 'Los datos del usuario se actualizaron correctamente')
+      res.redirect("/administradores")
     } catch (error) {
+      console.log(error)
       req.flash("message", "Hubo un error");
       res.redirect("/administradores/edit/" + id);
     }
@@ -101,15 +74,7 @@ class AdministradorController {
   async Buscar(req, res) {
     try {
       const { txtBuscar } = req.body;
-
-      const API = "https://api-horariomaestros.azurewebsites.net/Principal/ConsultarUsuarios";
-      const response = await fetch(API);
-      const usu = await response.json();
-
-      const usuarios = usu.filter((a) => a.nombre.toLowerCase().includes(txtBuscar.toLowerCase()));
-
-      console.log(usuarios);
-
+      const usuarios = await pool.query(`select * from usuarios where nombre like '%${txtBuscar.toLowerCase()}%'`)
       res.render("administradores/administradores", { usuarios });
     } catch (error) {
       console.log(error);
@@ -121,10 +86,7 @@ class AdministradorController {
   async Eliminar(req, res) {
     try {
       const { id } = req.params;
-      const API = `https://api-horariomaestros.azurewebsites.net/Principal/EliminarUsuario?Codigo=${id}`
-      const response = await fetch(API);
-      const data = await response;
-
+      await pool.query('delete from usuarios where id = ?',[id])
       req.flash("success", "Se eliminó el usuario");
       res.redirect("/administradores");
     } catch (error) {

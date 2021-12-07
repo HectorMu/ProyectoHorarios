@@ -1,0 +1,51 @@
+{{>sidebar}}
+
+<div id="content">
+  {{>navigation}}
+  {{>message}}
+  <div class="menu_info card mt-4">
+    <div class="card-body card-buscador">
+      <div class="col-auto">
+        <div class="row">
+          <form action="/public/horarios/search" method="post" class="col-md-6 mb-2 input-group">
+            <input type="text" class="form-control" name="txtBuscar" id="tableSearch"
+              placeholder="Buscar por maestro..." />
+            <div class="input-group-prepend">
+              <button type="submit" class="btn btn-info">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </form>
+          <div class="col-md-6 my-auto" style="text-align: right;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body card-h5 bg-gray">
+      <div class="container">
+        <h5>Maestros</h5>
+      </div>
+    </div>
+
+    <div class="card-body col-12">
+        <div id="cardsRow" class="row">
+          {{#each maestros}}
+          <div class="col card-col col-md-6  col-xl-4 col-lg-6">
+            <div class="card mb-4 shadow" style="width: 100%;">
+              <div class="card-body text-center">
+                <h5 class="card-title font-weight-bold">{{nombre}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{academia}}</h6>
+                <a href="/horarios/maestro/{{id}}" class="btn btn-info shadow rounded-pill mt-2">Horarios <i class="fas fa-arrow-alt-circle-right"></i></a>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>  
+    </div>
+  </div>
+  <!--END TABLA-->
+
+  <script type="module" src="/js/index.js"></script>
+  <script src="/js/liveSearch.js"></script>
+</div>

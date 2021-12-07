@@ -3,7 +3,7 @@
 <div id="content" class="">
   {{>navigation}}
   {{>message}}
-  
+
   <div class="menu_info container mt-5">
     <div class="row">
       <div class="col-lg-4 col-md-6 col-12 mx-auto">
@@ -11,32 +11,27 @@
           <div class="card-header">
             <h3>Editar maestro</h3>
           </div>
-          
+
           <div class="card-body">
             <form action="/maestros/editarM/{{m.id}}" method="POST">
 
               {{!-- INPUT 2 --}}
               <div class="form-group">
-                <input
-                  type="text"
-                  name="nombre"
-                  placeholder="Nombre"
-                  class="form-control"
-                  value="{{m.nombre}}"
-                  required
-                />
+                <input type="text" name="nombre" placeholder="Nombre" class="form-control" value="{{m.nombre}}"
+                  required />
               </div>
 
-                {{!-- INPUT 3 --}}
+              {{!-- INPUT 3 --}}
+              <label for="academia">Academia</label>
               <div class="form-group">
-                <input
-                  type="text"
-                  name="academia"
-                  placeholder="Academia"
-                  class="form-control"
-                  value="{{m.academia}}"
-                  required
-                />
+                <select name="academia" value="{{m.academia}}" class="form-control" required>
+                  <option value="IC">IC</option>
+                  <option value="IE">IE</option>
+                  <option value="II">II</option>
+                  <option value="IGE">IGE</option>
+                  <option value="ISC">ISC</option>
+                  <option value="ISA">ISA</option>
+                </select>
               </div>
 
               {{!-- BOTON GUARDAR --}}
@@ -44,10 +39,12 @@
                 <button class="btn btn-info btn-block">
                   Editar
                 </button>
+                <a href="/maestros" class="btn btn-danger btn-block">
+                  Cancelar
+                </a>
               </div>
             </form>
           </div>
-
         </div>
       </div>
     </div>

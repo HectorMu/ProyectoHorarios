@@ -1,23 +1,25 @@
+CREATE DATABASE horariostect;
 
-create database template;
-use template;
+USE horariostect;
 
-create table rol(
-    id int primary key auto_increment,
-    description varchar(50)
+CREATE TABLE usuarios(
+id INT PRIMARY KEY AUTO_INCREMENT,
+nombre VARCHAR (100),
+correo VARCHAR(100),
+PASSWORD VARCHAR(255));
+CREATE TABLE maestros(
+id INT PRIMARY KEY AUTO_INCREMENT,
+nombre VARCHAR(50),
+academia VARCHAR(100)
+);
+DROP TABLE horarios;
+horariosCREATE TABLE horarios
+(
+id INT PRIMARY KEY AUTO_INCREMENT,
+dia VARCHAR(50),
+rangohoras VARCHAR(50),
+ubicacion VARCHAR (50),
+fk_maestro INT,
+FOREIGN KEY (fk_maestro) REFERENCES maestros(id)
 );
 
-insert into rol values
-(null, 'user'),
-(null, 'admin'),
-(null, 'supervisor');
-
-create table user(
-    id_user int primary key auto_increment,
-    user varchar(50),
-    fullname varchar(50),
-    email varchar(50),
-    password varchar(250),
-    fk_rol int,
-    foreign key(fk_rol) references rol(id)
-);

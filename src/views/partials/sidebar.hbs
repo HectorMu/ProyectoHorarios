@@ -12,15 +12,15 @@
       {{/if}}
     </p>
 
-    <li>
-      <a class="link" href="/horarios">
+    
+
+    {{#if user}}
+      <li>
+      <a class="link" href="/horarios/">
         <i class="far fa-clock mr-1"></i>
         Horarios
       </a>
     </li>
-
-    {{#if user}}
-
       <li>
         <a class="link" href="/maestros">
           <i class="fas fa-chalkboard-teacher mr-1"></i>
@@ -34,7 +34,13 @@
           Administradores
         </a>
       </li>
-
+      {{else}}
+        <li>
+        <a class="link" href="/public/horarios/">
+          <i class="far fa-clock mr-1"></i>
+          Horarios
+        </a>
+      </li>
     {{/if}}
   </ul>
 </nav>

@@ -1,11 +1,9 @@
-const fetch = require("node-fetch");
+const pool = require('../lib/database')
 class MaestroController {
   async List(req, res) {
     try {
-      const API =
-        "https://api-horariomaestros.azurewebsites.net/Principal/BuscarMaestroCompleto?nombre=";
-      const response = await fetch(API);
-      const maestros = await response.json();
+
+      const maestros = await pool.query('select * from maestros')
       res.render("maestros/maestros", { maestros });
     } catch (error) {
       console.log(error);
@@ -20,17 +18,10 @@ class MaestroController {
   async Insert(req, res) {
     try {
       const { nombre, academia } = req.body;
-      const API = `https://api-horariomaestros.azurewebsites.net/Principal/AlmacenarMaestro?Nombre=${nombre}&Academia=${academia}`;
-      const response = await fetch(API);
-      const maestro = await response;
-
-      if (maestro.statusText === "OK") {
-        req.flash("success", "Se agrego el maestro correctamente");
-        res.redirect("/maestros");
-      } else {
-        req.flash("message", "Hubo un error al agregar el maestro");
-        res.redirect("/maestros/add");
-      }
+      const nuevoMaestro = { nombre, academia }
+      await pool.query('insert into maestros set ?', [nuevoMaestro])
+      req.flash("success", "Se agrego el maestro correctamente");
+      res.redirect("/maestros");
     } catch (error) {
       console.log(error);
       req.flash("message", error);
@@ -39,43 +30,28 @@ class MaestroController {
   }
 
   async RenderEdit(req, res) {
+    const { id } = req.params;
     try {
-      const { id } = req.params;
-      const API =
-        "https://api-horariomaestros.azurewebsites.net/Principal/BuscarMaestroCompleto?nombre=";
-      const response = await fetch(API);
-      const maestros = await response.json();
-      const maestro = maestros.filter((m) => m.id == id);
-
+      const maestro = await pool.query('select * from maestros where id = ?', [id])
       res.render("maestros/editarM", { m: maestro[0] });
     } catch (error) {
       console.log(error);
       res.render("maestros/editarM");
     }
   }
-  
+
   //Metodo para editar
   async Edit(req, res) {
+    const { id } = req.params;
     try {
-      const { id } = req.params;
       const { nombre, academia } = req.body;
-      const API = `https://api-horariomaestros.azurewebsites.net/Principal/ActualizarMaestro?Id=${id}&Nombre=${nombre}&Academia=${academia}`;
-      const response = await fetch(API);
-      const data = await response;
+      const maestroEditado = { ...req.body }
+      await pool.query('update maestros set ?  where id = ?',[maestroEditado,id])
+      req.flash(
+        "success",
+        "Los datos del maestro se actualizaron correctamente")
+      res.redirect("/maestros");
 
-      if (data.statusText == "OK") {
-        req.flash(
-          "success",
-          "Los datos del maestro se actualizaron correctamente"
-        );
-        res.redirect("/maestros");
-      } else {
-        req.flash(
-          "message",
-          "Ocurrio un error al actualizar, intentalo de nuevo"
-        );
-        res.redirect("/maestros/editarM/" + id);
-      }
     } catch (error) {
       req.flash("message", "Ocurrio un error, intentalo de nuevo");
       res.redirect("/maestros/editarM/" + id);
@@ -86,15 +62,7 @@ class MaestroController {
   async Buscar(req, res) {
     try {
       const { txtBuscar } = req.body;
-
-      const API =
-        "https://api-horariomaestros.azurewebsites.net/Principal/BuscarMaestroCompleto?nombre=";
-      const response = await fetch(API);
-      const teacher = await response.json();
-
-      const maestros = teacher.filter((m) =>
-        m.nombre.toLowerCase().includes(txtBuscar.toLowerCase())
-      );
+      const maestros = await pool.query(`select * from maestros where nombre like '%${txtBuscar.toLowerCase()}%'`)
       res.render("maestros/maestros", { maestros });
     } catch (error) {
       console.log(error);
@@ -105,10 +73,8 @@ class MaestroController {
   async Eliminar(req, res) {
     try {
       const { id } = req.params;
-      const API = `https://api-horariomaestros.azurewebsites.net/Principal/EliminarMaestro?Id=${id}`;
-      const response = await fetch(API);
-      const data = await response;
-      req.flash("success", "El maestro fue eliminado con exito");
+      await pool.query('delete from horarios where fk_maestro = ?',[id])
+      await pool.query('delete from maestros where id = ?',[id])
       res.redirect("/maestros");
     } catch (error) {
       req.flash("message", "El maestro no fue eliminado, vuelva a intentarlo");

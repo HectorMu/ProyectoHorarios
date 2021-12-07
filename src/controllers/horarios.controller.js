@@ -1,14 +1,10 @@
-const fetch = require("node-fetch");
+const pool = require('../lib/database')
 
 class HorariosController {
   async List(req, res) {
     try {
-      const API =
-        "https://api-horariomaestros.azurewebsites.net/Principal/BuscarHorario?nombre=";
-      const response = await fetch(API);
-      const horarios = await response.json();
-
-      res.render("horarios/horarios", { horarios });
+      const maestros = await pool.query('select * from maestros')
+      res.render("horarios/horarios", { maestros });
     } catch (error) {
       console.log(error);
       res.render("horarios/horarios");
@@ -49,16 +45,14 @@ class HorariosController {
   async Buscar(req, res) {
     try {
       const { txtBuscar } = req.body;
-      const API =
-        "https://api-horariomaestros.azurewebsites.net/Principal/BuscarHorario?nombre=";
+
+      const API ="https://api-horariomaestros.azurewebsites.net/Principal/BuscarMaestroCompleto?nombre=";
       const response = await fetch(API);
-      const hora = await response.json();
-
-      const horarios = hora.filter((h) =>
-        h.nombre.toLowerCase().includes(txtBuscar.toLowerCase())
-      );
-
-      res.render("horarios/horarios", { horarios });
+      const data = await response.json();
+      const maestros = data.filter(m =>
+        m.nombre.toLowerCase().includes(txtBuscar.toLowerCase())
+      )
+      res.render("horarios/horarios", { maestros });
     } catch (error) {
       console.log(error);
       res.render("horarios/horarios", { horarios });
@@ -123,6 +117,50 @@ class HorariosController {
     } catch (error) {
       req.flash("message", "El Horario no fue eliminado, vuelva a intentarlo");
       res.redirect("/horarios/");
+    }
+  }
+  async RenderScheduleChoosing (req, res){
+    const { id } = req.params;
+    try {
+      const Maestro = await pool.query('select * from maestros where id = ?',[id])
+      res.render("horarios/horarioPorMaestro", { Maestro: Maestro[0].nombre});
+    } catch (error) {
+      console.log(error)
+    }
+  }
+   async listPublicSchedules (req, res) {
+    try {
+      const maestros = await pool.query('select * from maestros')
+      res.render("horarios/horariosPublicos", { maestros });
+    } catch (error) {
+      console.log(error);
+      res.render("horarios/horariosPublicos");
+    }
+  }
+  async searchPublicSchedules (req, res){
+    try {
+      const { txtBuscar } = req.body;
+
+      const API ="https://api-horariomaestros.azurewebsites.net/Principal/BuscarMaestroCompleto?nombre=";
+      const response = await fetch(API);
+      const data = await response.json();
+      const maestros = data.filter(m =>
+        m.nombre.toLowerCase().includes(txtBuscar.toLowerCase())
+      )
+      res.render("horarios/horariosPublicos", { maestros });
+    } catch (error) {
+      console.log(error);
+      res.render("horarios/horariosPublicos", { horarios });
+    }
+  }
+  async renderPublicTeacherSchedule (req, res){
+    const { id } = req.params;
+    try {
+      const Maestro = await pool.query('select * from maestros where id = ?',[id])
+      res.render("horarios/horariosPublicosPorMaestro", { Maestro: Maestro[0].nombre});
+      
+    } catch (error) {
+      console.log(error)
     }
   }
 }

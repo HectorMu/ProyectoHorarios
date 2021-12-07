@@ -1,0 +1,49 @@
+{{>sidebar}}
+
+<div id="content">
+  {{>navigation}}
+  {{>message}}
+  <div class="menu_info card mt-4">
+    <div class="card-body card-buscador">
+      <div class="col-auto">
+        <div class="row">
+
+          {{#if user}}
+          <div class="col-md-6 my-auto" style="text-align: right;">          
+          </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body card-h5 bg-gray">
+      <div class="container">
+        <h5>Asignar horarios profesor: {{Maestro}}</h5>
+      </div>
+    </div>
+
+    <div class="card-body col-12">
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered text-center">
+          <thead>
+            <tr>
+                <th>Hora</th>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miercoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th>Sabado</th>
+            </tr>
+          </thead>
+          <tbody id="tBodyTeacherSchedule"> 
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--END TABLA-->
+<script src="/js/index.js"></script>
+<script src="/js/horariosHandler.js"></script>
+</div>

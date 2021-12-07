@@ -1,8 +1,8 @@
+const pool = require('../lib/database')
 const bcrypt = require('bcryptjs');
-const { options } = require('../routes/index.route');
 
 const helpers = {};
-const fetch = require("node-fetch");
+
 
 helpers.encryptPassword = async (password) => {
     const salt = await bcrypt.genSalt(10);
@@ -19,28 +19,18 @@ helpers.matchPassword = async (password, savedPassword) => {
 };
 
 helpers.initialState = async ()=>{
-    const response = await fetch('https://api-horariomaestros.azurewebsites.net/Principal/ConsultarUsuarios')
-    const usuarios = await response.json()
+    const usuarios = await pool.query('select * from usuarios')
     //si ya hay usuarios registrados, retorna 
     if(usuarios.length > 0) return
     //si no, has el siguiente codigo para crear un usuario
     try {
         const usuarioInicial = { 
-            usuario:'admin', 
-            nombre:'supervisor', 
+            nombre:'Administrador', 
             correo:'adminSUPP@tecmm.edu.mx', 
             password: process.env.ADMINPASS
         }
         usuarioInicial.password = await helpers.encryptPassword(process.env.ADMINPASS)
-        const API = `https://api-horariomaestros.azurewebsites.net/Principal/AlmacenarUsuario
-        ?Usuario=${usuarioInicial.usuario}
-        &Nombre=${usuarioInicial.nombre}
-        &Correo=${usuarioInicial.correo}
-        &Password=${usuarioInicial.password}`;
-
-        const response = await fetch(API);
-        const data = await response;
-        return data.statusText === "Ok" ? console.log('Usuario inicial creado') : console.log('Hubo un error al crear el usuario inicial')
+        await pool.query('insert into usuarios set ? ',[usuarioInicial])
 
     } catch (error) {
         console.log(error);
@@ -48,12 +38,8 @@ helpers.initialState = async ()=>{
 }
 
 helpers.validateExistingEmail = async (email)=>{
-
-    const response = await fetch('https://api-horariomaestros.azurewebsites.net/Principal/ConsultarUsuarios')
-    const usuarios = await response.json()
-    const usuario = usuarios.filter(u => u.correo ==  email);
-    console.log(usuario)
-    return usuario.length > 0 ? true : false;
+    const user = await pool.query('select * from usuarios where correo = ?',[email])
+    return user.length > 0 ? true : false;
 }
 
 
