@@ -4,7 +4,7 @@ class MaestroController {
     try {
 
       const maestros = await pool.query('select * from maestros')
-      res.render("maestros/maestros", { maestros });
+      res.render("Maestros/maestros", { maestros });
     } catch (error) {
       console.log(error);
       res.render("Maestros/maestros");
@@ -33,7 +33,7 @@ class MaestroController {
     const { id } = req.params;
     try {
       const maestro = await pool.query('select * from maestros where id = ?', [id])
-      res.render("maestros/editarM", { m: maestro[0] });
+      res.render("Maestros/editarM", { m: maestro[0] });
     } catch (error) {
       console.log(error);
       res.render("Maestros/editarM");
@@ -63,7 +63,7 @@ class MaestroController {
     try {
       const { txtBuscar } = req.body;
       const maestros = await pool.query(`select * from maestros where nombre like '%${txtBuscar.toLowerCase()}%'`)
-      res.render("maestros/maestros", { maestros });
+      res.render("Maestros/maestros", { maestros });
     } catch (error) {
       console.log(error);
       res.render("Maestros/maestros");
